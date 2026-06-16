@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>小张和阿毅的纪念日</title>
+  <style>
+    :root {
+      --ink: #382e2b;
+      --soft-ink: #6d5d58;
+      --paper: rgba(255, 249, 241, 0.86);
+      --line: rgba(121, 86, 74, 0.18);
+      --rose: #c9787d;
+      --rose-deep: #99575e;
+      --sage: #6f806b;
+      --gold: #b9904d;
+      --cream: #fff7ed;
+      --shadow: rgba(61, 39, 31, 0.24);
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--ink);
+      background: #f3e4dc;
+      overflow-x: hidden;
+    }
+
+    .shell {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      align-items: center;
+      padding: 28px;
+      isolation: isolate;
+    }
+
+    .shell::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background:
+        linear-gradient(110deg, rgba(255, 247, 238, 0.82), rgba(255, 247, 238, 0.28) 42%, rgba(75, 54, 48, 0.18)),
+        url("assets/morning-bg.png") center / cover no-repeat;
+      transform: scale(1.02);
+    }
+
+    .shell::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(72, 49, 43, 0.12));
+      pointer-events: none;
+    }
+
+    .layout {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .hero,
+    .panel {
+      border: 1px solid rgba(255, 255, 255, 0.64);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 24px 70px var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero {
+      min-height: 620px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: clamp(26px, 5vw, 58px);
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--sage);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    h1 {
+      margin: 18px 0 0;
+      font-size: clamp(34px, 5.8vw, 74px);
+      line-height: 1.08;
+      letter-spacing: 0;
+      font-weight: 650;
+    }
+
+    .days {
+      display: flex;
+      align-items: end;
+      gap: 12px;
+      margin: 34px 0 0;
+      color: var(--rose-deep);
+    }
+
+    .days strong {
+      font-size: clamp(86px, 15vw, 176px);
+      line-height: 0.82;
+      letter-spacing: 0;
+      font-weight: 760;
+    }
+
+    .days span {
+      padding-bottom: 12px;
+      font-size: clamp(24px, 4vw, 42px);
+      font-weight: 700;
+    }
+
+    .sentence {
+      max-width: 38em;
+      margin: 26px 0 0;
+      color: var(--soft-ink);
+      font-size: clamp(16px, 2vw, 20px);
+      line-height: 1.9;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 36px;
+    }
+
+    .stat {
+      min-height: 96px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 252, 247, 0.58);
+    }
+
+    .stat b {
+      display: block;
+      color: var(--ink);
+      font-size: clamp(20px, 3vw, 30px);
+      line-height: 1.2;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 8px;
+      color: var(--soft-ink);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .panel {
+      padding: 24px;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.35;
+    }
+
+    .panel p {
+      margin: 8px 0 0;
+      color: var(--soft-ink);
+      line-height: 1.75;
+    }
+
+    form {
+      display: grid;
+      gap: 15px;
+      margin-top: 24px;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid rgba(121, 86, 74, 0.24);
+      border-radius: 8px;
+      padding: 0 13px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.68);
+      font: inherit;
+    }
+
+    input:focus {
+      border-color: rgba(153, 87, 94, 0.58);
+      outline: 3px solid rgba(201, 120, 125, 0.2);
+    }
+
+    button {
+      min-height: 46px;
+      border: 0;
+      border-radius: 999px;
+      padding: 0 20px;
+      color: #fffaf4;
+      background: linear-gradient(135deg, var(--rose-deep), var(--rose), var(--gold));
+      box-shadow: 0 13px 28px rgba(153, 87, 94, 0.28);
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .subtle {
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .pulse {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(201, 120, 125, 0.38);
+      box-shadow: 0 0 28px rgba(255, 250, 244, 0.8);
+      animation: float 9s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      50% {
+        transform: translate3d(20px, -28px, 0) scale(1.45);
+      }
+    }
+
+    @media (max-width: 860px) {
+      .shell {
+        padding: 14px;
+        align-items: start;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <span class="pulse" style="left: 8%; top: 18%; animation-delay: -2s;"></span>
+    <span class="pulse" style="left: 88%; top: 24%; animation-delay: -5s;"></span>
+    <span class="pulse" style="left: 78%; top: 80%; animation-delay: -7s;"></span>
+
+    <div class="layout">
+      <section class="hero" aria-label="纪念日计时">
+        <div>
+          <p class="eyebrow" id="todayText"></p>
+          <h1 id="title">小张和阿毅已经一起走过</h1>
+          <div class="days" aria-live="polite">
+            <strong id="dayCount">1</strong>
+            <span>天</span>
+          </div>
+          <p class="sentence" id="dailyLine"></p>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <b id="sinceText">未设置</b>
+            <span>纪念日</span>
+          </div>
+          <div class="stat">
+            <b id="nextMidnight">00:00:00</b>
+            <span>距离明天自动刷新</span>
+          </div>
+          <div class="stat">
+            <b id="nextHundred">-</b>
+            <span>下一个整百天</span>
+          </div>
+        </div>
+      </section>
+
+      <aside class="panel" aria-label="设置">
+        <h2>小张和阿毅的小日历</h2>
+        <p>从 2026 年 5 月 12 日开始，每天到 24 点，页面会自动更新成新的一天。</p>
+
+        <form id="settings">
+          <label>
+            她的称呼
+            <input id="nameInput" type="text" maxlength="16" placeholder="小张">
+          </label>
+          <label>
+            你们的纪念日
+            <input id="dateInput" type="date" required>
+          </label>
+          <button type="submit">保存这一天</button>
+        </form>
+
+        <p class="subtle" id="saveHint">你也可以把这个文件夹发给她，打开 index.html 就能看。</p>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "codex_anniversary_site_v1";
+    const fallback = {
+      name: "小张",
+      boy: "阿毅",
+      since: "2026-05-12"
+    };
+
+    const lines = [
+      "今天也在我们的故事里，轻轻加上一页。",
+      "普通的一天，因为有你，就变成了值得记住的一天。",
+      "时间会往前走，我也会一直认真喜欢你。",
+      "我们不是只在纪念日才浪漫，是每天都在靠近一点。",
+      "愿今天的你被好好爱着，也被自己温柔照顾着。",
+      "第很多很多天里，我还是会为你心动。"
+    ];
+
+    const $ = (selector) => document.querySelector(selector);
+    const saved = {
+      ...fallback,
+      ...(JSON.parse(localStorage.getItem(STORAGE_KEY) || "null") || {})
+    };
+
+    function startOfLocalDay(date) {
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+
+    function parseLocalDate(value) {
+      const [year, month, day] = value.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    }
+
+    function formatDate(date) {
+      return new Intl.DateTimeFormat("zh-CN", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      }).format(date);
+    }
+
+    function formatToday(date) {
+      return new Intl.DateTimeFormat("zh-CN", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long"
+      }).format(date);
+    }
+
+    function pad(value) {
+      return String(value).padStart(2, "0");
+    }
+
+    function getDaysTogether(since, now = new Date()) {
+      const start = startOfLocalDay(parseLocalDate(since));
+      const today = startOfLocalDay(now);
+      return Math.max(1, Math.floor((today - start) / 86400000) + 1);
+    }
+
+    function getNextHundred(days) {
+      return Math.ceil(days / 100) * 100;
+    }
+
+    function render() {
+      const now = new Date();
+      const days = getDaysTogether(saved.since, now);
+      const sinceDate = parseLocalDate(saved.since);
+      const nextHundred = getNextHundred(days);
+      const line = lines[(days - 1) % lines.length];
+
+      document.title = `${saved.name}和${saved.boy || fallback.boy}，我们的第 ${days} 天`;
+      $("#todayText").textContent = formatToday(now);
+      $("#title").textContent = `${saved.name}和${saved.boy || fallback.boy}已经一起走过`;
+      $("#dayCount").textContent = days;
+      $("#dailyLine").textContent = line;
+      $("#sinceText").textContent = formatDate(sinceDate);
+      $("#nextHundred").textContent = nextHundred === days ? "就是今天" : `还有 ${nextHundred - days} 天`;
+      $("#nameInput").value = saved.name;
+      $("#dateInput").value = saved.since;
+    }
+
+    function tickCountdown() {
+      const now = new Date();
+      const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+      const diff = Math.max(0, midnight - now);
+      const hours = Math.floor(diff / 3600000);
+      const minutes = Math.floor((diff % 3600000) / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+      $("#nextMidnight").textContent = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+    }
+
+    function scheduleMidnightRefresh() {
+      const now = new Date();
+      const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+      window.setTimeout(() => {
+        render();
+        tickCountdown();
+        scheduleMidnightRefresh();
+      }, Math.max(1000, midnight - now + 800));
+    }
+
+    $("#settings").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const next = {
+        name: $("#nameInput").value.trim() || fallback.name,
+        boy: saved.boy || fallback.boy,
+        since: $("#dateInput").value || fallback.since
+      };
+      Object.assign(saved, next);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+      render();
+      $("#saveHint").textContent = "保存好了。以后每天 24 点，这里会自动跳到新的一天。";
+    });
+
+    render();
+    tickCountdown();
+    scheduleMidnightRefresh();
+    window.setInterval(tickCountdown, 1000);
+  </script>
+</body>
+</html>
